@@ -3,6 +3,7 @@ package com.ceiba.biblioteca.infraestructura;
 import com.ceiba.biblioteca.aplicacion.comando.ComandoLibro;
 import com.ceiba.biblioteca.testdatabuilder.LibroTestDataBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class ControladorPrestamoTest {
     public static final String ESTE_PRODUCTO_NO_CUENTA_CON_GARANTIA = "Este producto no cuenta con garantía extendida";
-    public static final String ISBN_LIBRO_PD5121 = "PD5121";
+    public static final String ISBN_LIBRO = "1234";
     public static final String NOMBRE_CLIENTE_PEDRO = "PEDRO";
-    public static final String ISBN_1234 = "1234";
 
     @Autowired
     private MockMvc mvc;
@@ -32,11 +32,22 @@ public class ControladorPrestamoTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Before
+    public void init() throws Exception {
+        ComandoLibro libroA = new ComandoLibro(ISBN_LIBRO, "mock", 2020);
+        mvc.perform(MockMvcRequestBuilders
+                .post("/libros")
+                .content(objectMapper.writeValueAsString(libroA))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
     @Test
     public void generarPrestamoLibro() throws Exception {
         ComandoLibro comandoLibro = new LibroTestDataBuilder().buildComando();
         mvc.perform(MockMvcRequestBuilders
-                .post("/prestamos/{isbn}/{nombreCliente}", ISBN_LIBRO_PD5121, NOMBRE_CLIENTE_PEDRO)
+                .post("/prestamos/{isbn}/{nombreCliente}", ISBN_LIBRO, NOMBRE_CLIENTE_PEDRO)
                 .content(objectMapper.writeValueAsString(comandoLibro))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -46,13 +57,12 @@ public class ControladorPrestamoTest {
 
     @Test
     public void obtenerPrestamoLibro() throws Exception {
-        ComandoLibro comandoLibro = new LibroTestDataBuilder().buildComando();
         mvc.perform(MockMvcRequestBuilders
-                .get("/prestamos/{isbn}", ISBN_1234)
+                .get("/prestamos/{isbn}", ISBN_LIBRO)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.libro.isbn").value(ISBN_1234))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.libro.isbn").value(ISBN_LIBRO))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nombreUsuario").value(NOMBRE_CLIENTE_PEDRO));
 
     }

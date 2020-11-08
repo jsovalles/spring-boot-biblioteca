@@ -20,8 +20,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.Date;
+
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -119,6 +120,48 @@ public class ServicioBibliotecarioTest {
 
         //assert
         assertTrue(esPalindromo);
+
+    }
+
+    @Test
+    public void fechaDeEntregaEsNula(){
+
+        // arrange
+        Libro libro = new LibroTestDataBuilder().buildPalindromo();
+
+        RepositorioPrestamo repositorioPrestamo = mock(RepositorioPrestamo.class);
+        RepositorioLibro repositorioLibro = mock(RepositorioLibro.class);
+
+        when(repositorioPrestamo.obtenerLibroPrestadoPorIsbn(libro.getIsbn())).thenReturn(null);
+
+        ServicioBibliotecario servicioBibliotecario = new ServicioBibliotecario(repositorioLibro, repositorioPrestamo);
+
+        // act
+        Date fechaEntrega = servicioBibliotecario.fechaEntregaMaxima(libro.getIsbn());
+
+        //assert
+        assertNull(fechaEntrega);
+
+    }
+
+    @Test
+    public void fechaDeEntregaNoEsNula(){
+
+        // arrange
+        Libro libro = new LibroTestDataBuilder().buildLibroPrestadoPorQuinceDias();
+
+        RepositorioPrestamo repositorioPrestamo = mock(RepositorioPrestamo.class);
+        RepositorioLibro repositorioLibro = mock(RepositorioLibro.class);
+
+        when(repositorioPrestamo.obtenerLibroPrestadoPorIsbn(libro.getIsbn())).thenReturn(null);
+
+        ServicioBibliotecario servicioBibliotecario = new ServicioBibliotecario(repositorioLibro, repositorioPrestamo);
+
+        // act
+        Date fechaEntrega = servicioBibliotecario.fechaEntregaMaxima(libro.getIsbn());
+
+        //assert
+        assertNotNull(fechaEntrega);
 
     }
 }

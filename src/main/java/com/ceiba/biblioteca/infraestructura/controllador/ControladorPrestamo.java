@@ -20,7 +20,7 @@ public class ControladorPrestamo {
 
     @PostMapping("/{isbn}/{nombreCliente}")
     public void prestar(@PathVariable(name = "isbn") String isbn, @PathVariable(name = "nombreCliente") String nombreCliente, @RequestBody ComandoLibro comandoLibro) {
-        this.manejadorGenerarPrestamo.ejecutar(comandoLibro, nombreCliente);
+        this.manejadorGenerarPrestamo.ejecutar(isbn, nombreCliente, comandoLibro);
     }
 
     @GetMapping("/{isbn}")

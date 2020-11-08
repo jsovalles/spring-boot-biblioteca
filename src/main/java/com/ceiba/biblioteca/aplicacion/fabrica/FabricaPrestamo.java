@@ -8,7 +8,9 @@ import java.util.Date;
 
 @Component
 public class FabricaPrestamo {
-    public Prestamo crearPrestamo(Libro libro, String nombreCliente){
+
+    public Prestamo crearPrestamo(Libro libro, String nombreCliente) {
         return new Prestamo(new Date(), libro, null, nombreCliente);
     }
+
 }

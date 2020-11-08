@@ -24,9 +24,10 @@ public class ManejadorGenerarPrestamo {
     }
 
     @Transactional
-    public void ejecutar(ComandoLibro comandoLibro, String nombreCliente) {
+    public void ejecutar(String isbn, String nombreCliente, ComandoLibro comandoLibro) {
         Libro libro = this.fabricaLibro.crearLibro(comandoLibro);
         Prestamo prestamo = this.fabricaPrestamo.crearPrestamo(libro,nombreCliente);
-        this.servicioBibliotecario.prestar(prestamo);
+        this.servicioBibliotecario.prestar(isbn, prestamo);
     }
+
 }
