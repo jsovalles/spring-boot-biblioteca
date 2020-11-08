@@ -9,6 +9,7 @@ public class LibroTestDataBuilder {
     private static final int ANIO = 2010;
     private static final String ISBN = "1234";
     private static final String NOMBRE_LIBRO = "Cien años de soledad";
+    private static final String ISBN_PALINDROMO = "1221";
 
     private String isbn;
     private String titulo;
@@ -38,6 +39,10 @@ public class LibroTestDataBuilder {
 
     public Libro build() {
         return new Libro(isbn, titulo, anio);
+    }
+
+    public Libro buildPalindromo() {
+        return new Libro(ISBN_PALINDROMO, titulo, anio);
     }
 
     public ComandoLibro buildComando() {

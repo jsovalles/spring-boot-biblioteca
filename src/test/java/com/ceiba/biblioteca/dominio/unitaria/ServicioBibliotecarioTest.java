@@ -79,5 +79,47 @@ public class ServicioBibliotecarioTest {
         //assert
         assertFalse(existeProducto);
     }
+
+    @Test
+    public void libroNoEsPalindromo(){
+
+        // arrange
+        Libro libro = new LibroTestDataBuilder().build();
+
+        RepositorioPrestamo repositorioPrestamo = mock(RepositorioPrestamo.class);
+        RepositorioLibro repositorioLibro = mock(RepositorioLibro.class);
+
+        when(repositorioPrestamo.obtenerLibroPrestadoPorIsbn(libro.getIsbn())).thenReturn(null);
+
+        ServicioBibliotecario servicioBibliotecario = new ServicioBibliotecario(repositorioLibro, repositorioPrestamo);
+
+        // act
+        boolean esPalindromo = servicioBibliotecario.esPalindromo(libro.getIsbn());
+
+        //assert
+        assertFalse(esPalindromo);
+
+    }
+
+    @Test
+    public void libroEsPalindromo(){
+
+        // arrange
+        Libro libro = new LibroTestDataBuilder().buildPalindromo();
+
+        RepositorioPrestamo repositorioPrestamo = mock(RepositorioPrestamo.class);
+        RepositorioLibro repositorioLibro = mock(RepositorioLibro.class);
+
+        when(repositorioPrestamo.obtenerLibroPrestadoPorIsbn(libro.getIsbn())).thenReturn(null);
+
+        ServicioBibliotecario servicioBibliotecario = new ServicioBibliotecario(repositorioLibro, repositorioPrestamo);
+
+        // act
+        boolean esPalindromo = servicioBibliotecario.esPalindromo(libro.getIsbn());
+
+        //assert
+        assertTrue(esPalindromo);
+
+    }
 }
 
