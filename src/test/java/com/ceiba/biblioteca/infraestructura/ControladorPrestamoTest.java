@@ -52,7 +52,8 @@ public class ControladorPrestamoTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.libro.isbn").value(ISBN_1234));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.libro.isbn").value(ISBN_1234))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nombreUsuario").value(NOMBRE_CLIENTE_PEDRO));
 
     }
 }
