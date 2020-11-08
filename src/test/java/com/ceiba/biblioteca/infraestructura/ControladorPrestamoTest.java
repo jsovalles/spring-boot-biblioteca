@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -22,6 +24,7 @@ public class ControladorPrestamoTest {
     public static final String ESTE_PRODUCTO_NO_CUENTA_CON_GARANTIA = "Este producto no cuenta con garantía extendida";
     public static final String ISBN_LIBRO_PD5121 = "PD5121";
     public static final String NOMBRE_CLIENTE_PEDRO = "PEDRO";
+    public static final String ISBN_1234 = "1234";
 
     @Autowired
     private MockMvc mvc;
@@ -38,6 +41,18 @@ public class ControladorPrestamoTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void obtenerPrestamoLibro() throws Exception {
+        ComandoLibro comandoLibro = new LibroTestDataBuilder().buildComando();
+        mvc.perform(MockMvcRequestBuilders
+                .get("/prestamos/{isbn}", ISBN_1234)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.libro.isbn").value(ISBN_1234));
 
     }
 }

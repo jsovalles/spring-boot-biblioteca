@@ -3,6 +3,7 @@ package com.ceiba.biblioteca.infraestructura;
 import com.ceiba.biblioteca.aplicacion.comando.ComandoLibro;
 import com.ceiba.biblioteca.testdatabuilder.LibroTestDataBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,17 @@ public class ControladorLibroTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Before
+    public void init() throws Exception{
+        ComandoLibro comandoLibro = new ComandoLibro("PD1023","PRUEBA GETLIBRO", 2020);
+        mvc.perform(MockMvcRequestBuilders
+                .post("/libros")
+                .content(objectMapper.writeValueAsString(comandoLibro))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void getLibroPorIsbn() throws Exception {

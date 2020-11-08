@@ -49,6 +49,7 @@ public class RepositorioPrestamoPersistente implements RepositorioPrestamo {
     @SuppressWarnings("rawtypes")
     private PrestamoEntity obtenerPrestamoEntityPorIsbn(String isbn) {
 
+
         Query query = entityManager.createNamedQuery(PRESTAMO_FIND_BY_ISBN);
         query.setParameter(ISBN, isbn);
 
